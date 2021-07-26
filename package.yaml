@@ -24,8 +24,11 @@ dependencies:
 
 library:
   source-dirs: src
-#  dependencies:
-#  - text
+  dependencies:
+  - text
+  - aeson
+  - http-conduit
+  - bytestring
 
 tests:
   haskell-bitcoinrpc-test:

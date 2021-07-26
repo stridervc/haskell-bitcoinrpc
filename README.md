@@ -1,1 +1,1 @@
-# haskell-bitcoinrpc
+Haskell library for bitcoind rpc

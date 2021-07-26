@@ -25,13 +25,18 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      BitcoinRPC
+      RPC
   other-modules:
       Paths_haskell_bitcoinrpc
   hs-source-dirs:
       src
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
+    , bytestring
+    , http-conduit
+    , text
   default-language: Haskell2010
 
 test-suite haskell-bitcoinrpc-test
