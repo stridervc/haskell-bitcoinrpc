@@ -29,6 +29,7 @@ library:
   - aeson
   - http-conduit
   - bytestring
+  - scientific
 
 tests:
   haskell-bitcoinrpc-test:
