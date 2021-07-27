@@ -9,7 +9,6 @@ import BitcoinRPCClient
 
 import Control.Monad.IO.Class (MonadIO)
 import Data.Scientific (toRealFloat)
-import Data.ByteString (ByteString)
 import GHC.Float (float2Int)
 import Network.HTTP.Simple
 import Data.Aeson

@@ -30,6 +30,7 @@ library:
   - http-conduit
   - bytestring
   - scientific
+  - containers
 
 tests:
   haskell-bitcoinrpc-test:
