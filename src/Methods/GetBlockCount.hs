@@ -13,6 +13,7 @@ import GHC.Float (float2Int)
 import Network.HTTP.Simple
 import Data.Aeson
 
+-- | Returns the height of the most-work fully-validated chain
 getBlockCount :: MonadIO m => BitcoinRPCClient -> m Int
 getBlockCount client = do
   response <- callBitcoinRPC client "getblockcount"

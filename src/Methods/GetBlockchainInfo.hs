@@ -4,6 +4,7 @@
 module Methods.GetBlockchainInfo
   ( BlockchainInfo (..)
   , SoftFork (..)
+  , Bip9Statistics (..)
   , getBlockchainInfo
   ) where
 
@@ -17,54 +18,32 @@ import Network.HTTP.Simple
 import GHC.Generics
 import Data.Aeson
 
-data ForkType = Buried | Bip9 | UnknownForkType deriving (Eq, Show)
-
-instance FromJSON ForkType where
-  parseJSON (String text) =
-    case text of
-      "buried"  -> return Buried
-      "bip9"    -> return Bip9
-      _         -> return UnknownForkType
-  parseJSON _ = undefined
-
-data Bip9Status = Bip9Defined | Bip9Started | Bip9LockedIn | Bip9Active | Bip9Failed | Bip9Unknown deriving (Eq, Show)
-
-instance FromJSON Bip9Status where
-  parseJSON (String text) =
-    case text of
-      "defined"   -> return Bip9Defined
-      "started"   -> return Bip9Started
-      "locked_in" -> return Bip9LockedIn
-      "active"    -> return Bip9Active
-      "failed"    -> return Bip9Failed
-      _           -> return Bip9Unknown
-  parseJSON _ = undefined
-
 data Bip9Statistics = Bip9Statistics
-  { period    :: Int
-  , threshold :: Int
-  , elapsed   :: Int
-  , count     :: Int
-  , possible  :: Bool
+  { period    :: Int  -- ^ The length in blocks of the BIP9 signalling period
+  , threshold :: Int  -- ^ The number of blocks required to activate the feature
+  , elapsed   :: Int  -- ^ The number of blocks elapsed since the beginning of the current period
+  , count     :: Int  -- ^ The number of blocks signalling in the current period
+  , possible  :: Bool -- ^ False if not enough blocks left in the current period to pass threshold
   } deriving (Eq, Show, Generic)
 
 instance FromJSON Bip9Statistics
 
+-- | Only applicable for BIP9 type softforks
 data Bip9Info = Bip9Info
-  { status    :: Bip9Status
-  , bit       :: Maybe Int
-  , start_time  :: Int
-  , timeout     :: Int
-  , since       :: Int
+  { status      :: Text       -- ^ "defined", "started", "locked_in", "active" or "failed"
+  , bit         :: Maybe Int  -- ^ The bit (0-28) in the block version field used to signal for this feature (only if status is "started")
+  , start_time  :: Int        -- ^ The minimum medium time
+  , timeout     :: Int        -- ^ The minimum medium time at which point the deployment is considered failed
+  , since       :: Int        -- ^ The height of the first block to which the status applies
   , statistics  :: Maybe Bip9Statistics
   } deriving (Eq, Show, Generic)
 
 instance FromJSON Bip9Info
 
 data SoftFork = SoftFork
-  { forktype  :: ForkType
-  , active    :: Bool
-  , height    :: Maybe Int
+  { forktype  :: Text       -- ^ "buried" or "bip9"
+  , active    :: Bool       -- ^ True if the rules are enforced for the mempool and the next block
+  , height    :: Maybe Int  -- ^ Height of the first block where the rules will be enforced (only if "buried" or "bip9" with active status)
   , bip9      :: Maybe Bip9Info
   } deriving (Eq, Show, Generic)
 
@@ -77,26 +56,29 @@ instance FromJSON SoftFork where
   parseJSON _ = undefined
 
 data BlockchainInfo = BlockchainInfo
-  { chain                 :: Text
-  , blocks                :: Int
-  , bestblockhash         :: Text
-  , difficulty            :: Float
-  , mediantime            :: Int
-  , verificationprogress  :: Float
-  , initialblockdownload  :: Bool
-  , chainwork             :: Text
-  , size_on_disk          :: Int
-  , pruned                :: Bool
+  { chain                 :: Text       -- ^ "main", "test" or "regtest"
+  , blocks                :: Int        -- ^ Height of the most fully validated chain
+  , headers               :: Int        -- ^ Current number of headers validated
+  , bestblockhash         :: Text       -- ^ Hash of the currently best block
+  , difficulty            :: Float      -- ^ Current difficulty
+  , mediantime            :: Int        -- ^ Median time for the current best block
+  , verificationprogress  :: Float      -- ^ Estimate of verification progress (0 to 1)
+  , initialblockdownload  :: Bool       -- ^ Estimate of whether this node is in initial block download mode
+  , chainwork             :: Text       -- ^ Total amount of work in active chain, in hexadecimal
+  , size_on_disk          :: Int        -- ^ Estimated size of the block and undo files on disk
+  , pruned                :: Bool       -- ^ True if the block are subject to pruning
+  , pruneheight           :: Maybe Int  -- ^ Lowest height of complete block stored (only if pruning enabled)
+  , automatic_pruning     :: Bool       -- ^ True if automatic pruning is enabled
   , softforks             :: Maybe (Map Text SoftFork)
-  , warnings              :: Text
+  , warnings              :: Text       -- ^ Any network and blockchain warnings
   } deriving (Eq, Show, Generic)
 
 instance FromJSON BlockchainInfo
 
-getBlockchainInfo :: MonadIO m => BitcoinRPCClient -> m (Either String BlockchainInfo)
+-- | Get blockchain info
+getBlockchainInfo :: MonadIO m => BitcoinRPCClient -> m BlockchainInfo
 getBlockchainInfo client = do
   response <- callBitcoinRPC client "getblockchaininfo"
-  -- let Just res = decode $ encode $ result $ getResponseBody response
-  let res = eitherDecode $ encode $ result $ getResponseBody response
+  let Just res = decode $ encode $ result $ getResponseBody response
   return res
 

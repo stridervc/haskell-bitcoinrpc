@@ -28,9 +28,6 @@ data RPCRequestBody = RPCRequestBody
 
 instance ToJSON RPCRequestBody
 
--- {"result":562840,"error":null,"id":null}
--- {"result":null,"error":{"code":-32601,"message":"Method not found"},"id":null}
-
 data RPCResult = RPCResult
   { result  :: Value
   , error   :: Maybe [(T.Text, Value)]
