@@ -68,7 +68,7 @@ data BlockchainInfo = BlockchainInfo
   , size_on_disk          :: Int        -- ^ Estimated size of the block and undo files on disk
   , pruned                :: Bool       -- ^ True if the block are subject to pruning
   , pruneheight           :: Maybe Int  -- ^ Lowest height of complete block stored (only if pruning enabled)
-  , automatic_pruning     :: Bool       -- ^ True if automatic pruning is enabled
+  , automatic_pruning     :: Maybe Bool -- ^ True if automatic pruning is enabled
   , softforks             :: Maybe (Map Text SoftFork)
   , warnings              :: Text       -- ^ Any network and blockchain warnings
   } deriving (Eq, Show, Generic)
