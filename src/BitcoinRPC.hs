@@ -14,8 +14,10 @@ This module is a work in progress. Currently I'm implementing RPC methods as I n
 
 module BitcoinRPC
   ( newBitcoinRPCClient
+  , BitcoinRPCClient
   , getBlockCount
   , getBlockchainInfo
+  , BlockchainInfo (..)
   ) where
 
 import BitcoinRPCClient
