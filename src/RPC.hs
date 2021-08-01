@@ -9,20 +9,21 @@ module RPC
   , defaultRPCRequest
   , setRequestRPCMethod
   , httpRPC
+  , getErrorOrValue
   ) where
 
-import qualified Data.Text as T
+import Data.Text (Text, pack)
 
 import Control.Monad.IO.Class (MonadIO)
 import Network.HTTP.Simple
 import GHC.Generics
 import Data.Aeson
 
-type RPCMethod = T.Text
+type RPCMethod = Text
 
 data RPCRequestBody = RPCRequestBody
-  { jsonrpc :: T.Text
-  , id      :: T.Text
+  { jsonrpc :: Text
+  , id      :: Text
   , method  :: RPCMethod
   } deriving (Eq, Show, Generic)
 
@@ -30,7 +31,7 @@ instance ToJSON RPCRequestBody
 
 data RPCResult = RPCResult
   { result  :: Value
-  , error   :: Maybe [(T.Text, Value)]
+  , error   :: Maybe [(Text, Value)]
   -- , id      :: Maybe T.Text
   } deriving (Eq, Show, Generic)
 
@@ -51,6 +52,13 @@ defaultRPCRequest
 setRequestRPCMethod :: RPCMethod -> Request -> Request
 setRequestRPCMethod method = setRequestBodyJSON $ newRPCRequestBody method
 
-httpRPC :: MonadIO m => Request -> m (Response RPCResult)
-httpRPC = httpJSON
+httpRPC :: MonadIO m => Request -> m (Response (Either JSONException RPCResult))
+httpRPC = httpJSONEither
 
+getErrorOrValue :: Response (Either JSONException RPCResult) -> Either Text Value
+getErrorOrValue response = do
+  case getResponseStatus response of
+    ok200 ->  do
+                case getResponseBody response of
+                  Left e    -> Left $ pack $ show e
+                  Right res -> Right $ result res

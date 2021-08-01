@@ -29,6 +29,6 @@ newBitcoinRPCClient host port username password
   defaultRPCRequest
 
 -- | Perform an RPC with given method name
-callBitcoinRPC :: MonadIO m => BitcoinRPCClient -> RPCMethod -> m (Response RPCResult)
+callBitcoinRPC :: MonadIO m => BitcoinRPCClient -> RPCMethod -> m (Response (Either JSONException RPCResult))
 callBitcoinRPC client method = httpRPC $ setRequestRPCMethod method $ request client
 

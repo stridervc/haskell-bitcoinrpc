@@ -12,7 +12,7 @@ import RPC
 import BitcoinRPCClient
 
 import Control.Monad.IO.Class (MonadIO)
-import Data.Text (Text)
+import Data.Text (Text, pack)
 import Data.Map (Map)
 import Network.HTTP.Simple
 import GHC.Generics
@@ -76,9 +76,12 @@ data BlockchainInfo = BlockchainInfo
 instance FromJSON BlockchainInfo
 
 -- | Get blockchain info
-getBlockchainInfo :: MonadIO m => BitcoinRPCClient -> m BlockchainInfo
+getBlockchainInfo :: MonadIO m => BitcoinRPCClient -> m (Either Text BlockchainInfo)
 getBlockchainInfo client = do
   response <- callBitcoinRPC client "getblockchaininfo"
-  let Just res = decode $ encode $ result $ getResponseBody response
-  return res
+  case getResponseBody response of
+    Left e      -> return $ Left $ pack $ show e
+    Right body  -> do
+      let Just res = decode $ encode $ result body
+      return $ Right res
 
