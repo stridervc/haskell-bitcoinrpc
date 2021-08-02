@@ -10,7 +10,9 @@ import RPC
 
 import Control.Monad.IO.Class (MonadIO)
 import Data.ByteString (ByteString)
+import Data.Text (Text, pack)
 import Network.HTTP.Simple
+import Data.Aeson
 
 type RPCHost      = ByteString
 type RPCPort      = Int
@@ -28,7 +30,12 @@ newBitcoinRPCClient host port username password
   $ setRequestPort port
   defaultRPCRequest
 
--- | Perform an RPC with given method name
-callBitcoinRPC :: MonadIO m => BitcoinRPCClient -> RPCMethod -> m (Response (Either JSONException RPCResult))
-callBitcoinRPC client method = httpRPC $ setRequestRPCMethod method $ request client
-
+-- | Perform an RPC with given method name and parameters
+callBitcoinRPC :: (MonadIO m, FromJSON a) => BitcoinRPCClient -> RPCMethod -> [RPCParam] -> m (Either Text a)
+callBitcoinRPC client method params = do
+  response <- httpRPC $ setRequestRPCMethod method params $ request client
+  case getResponseBody response of
+    Left e      -> return $ Left $ pack $ show e
+    Right body  -> case fromJSON $ result body of
+                    Error e     -> return $ Left $ pack e
+                    Success res -> return $ Right res

@@ -16,10 +16,4 @@ import Data.Aeson
 
 -- | Returns the height of the most-work fully-validated chain
 getBlockCount :: MonadIO m => BitcoinRPCClient -> m (Either Text Int)
-getBlockCount client = do
-  response <- callBitcoinRPC client "getblockcount"
-  case getResponseBody response of
-    Left e    -> return $ Left $ pack $ show e
-    Right res -> do
-      let Number num = result res
-      return $ Right $ float2Int $ toRealFloat num
+getBlockCount client = callBitcoinRPC client "getblockcount" []

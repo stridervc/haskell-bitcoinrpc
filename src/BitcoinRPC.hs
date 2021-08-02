@@ -1,3 +1,4 @@
+{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 {-|
@@ -18,9 +19,14 @@ module BitcoinRPC
   , getBlockCount
   , getBlockchainInfo
   , BlockchainInfo (..)
+  , getBlock
+  , Block (..)
+  , BlockHash
+  , TxID
   ) where
 
 import BitcoinRPCClient
 
+import Methods.GetBlock
 import Methods.GetBlockCount
 import Methods.GetBlockchainInfo

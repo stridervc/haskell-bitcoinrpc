@@ -5,6 +5,7 @@
 
 module RPC
   ( RPCMethod
+  , RPCParam
   , RPCResult (..)
   , defaultRPCRequest
   , setRequestRPCMethod
@@ -19,12 +20,14 @@ import Network.HTTP.Simple
 import GHC.Generics
 import Data.Aeson
 
-type RPCMethod = Text
+type RPCMethod  = Text
+type RPCParam   = Text
 
 data RPCRequestBody = RPCRequestBody
   { jsonrpc :: Text
   , id      :: Text
   , method  :: RPCMethod
+  , params  :: [RPCParam]
   } deriving (Eq, Show, Generic)
 
 instance ToJSON RPCRequestBody
@@ -37,11 +40,13 @@ data RPCResult = RPCResult
 
 instance FromJSON RPCResult
 
-newRPCRequestBody :: RPCMethod -> RPCRequestBody
-newRPCRequestBody m = RPCRequestBody  { jsonrpc = "1.0"
-                                      , RPC.id  = "haskell-bitcoinrpc"
-                                      , method  = m
-                                      }
+newRPCRequestBody :: RPCMethod -> [RPCParam] -> RPCRequestBody
+newRPCRequestBody m params = RPCRequestBody
+  { jsonrpc = "1.0"
+  , RPC.id  = "haskell-bitcoinrpc"
+  , method  = m
+  , params  = params
+  }
 
 defaultRPCRequest :: Request
 defaultRPCRequest
@@ -49,8 +54,8 @@ defaultRPCRequest
   $ setRequestMethod "POST"
   defaultRequest
 
-setRequestRPCMethod :: RPCMethod -> Request -> Request
-setRequestRPCMethod method = setRequestBodyJSON $ newRPCRequestBody method
+setRequestRPCMethod :: RPCMethod -> [RPCParam] -> Request -> Request
+setRequestRPCMethod method params = setRequestBodyJSON $ newRPCRequestBody method params
 
 httpRPC :: MonadIO m => Request -> m (Response (Either JSONException RPCResult))
 httpRPC = httpJSONEither

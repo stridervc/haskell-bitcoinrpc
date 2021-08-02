@@ -1,3 +1,4 @@
+{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
 
@@ -77,11 +78,4 @@ instance FromJSON BlockchainInfo
 
 -- | Get blockchain info
 getBlockchainInfo :: MonadIO m => BitcoinRPCClient -> m (Either Text BlockchainInfo)
-getBlockchainInfo client = do
-  response <- callBitcoinRPC client "getblockchaininfo"
-  case getResponseBody response of
-    Left e      -> return $ Left $ pack $ show e
-    Right body  -> do
-      let Just res = decode $ encode $ result body
-      return $ Right res
-
+getBlockchainInfo client = callBitcoinRPC client "getblockchaininfo" []
