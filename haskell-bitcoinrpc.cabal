@@ -30,7 +30,9 @@ library
       Methods.GetBlock
       Methods.GetBlockchainInfo
       Methods.GetBlockCount
+      Methods.GetRawTransaction
       RPC
+      Types
   other-modules:
       Paths_haskell_bitcoinrpc
   hs-source-dirs:

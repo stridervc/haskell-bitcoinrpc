@@ -10,6 +10,7 @@ module Methods.GetBlock
   ) where
 
 import RPC
+import Types
 import BitcoinRPCClient
 
 import Data.Aeson
@@ -17,9 +18,6 @@ import GHC.Generics
 import Data.Text (Text, pack)
 import Control.Monad.IO.Class (MonadIO)
 import Network.HTTP.Simple (getResponseBody)
-
-type BlockHash  = Text
-type TxID       = Text
 
 data Block = Block
   { hash              :: BlockHash
