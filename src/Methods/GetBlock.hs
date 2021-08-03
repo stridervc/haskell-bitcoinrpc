@@ -40,7 +40,7 @@ data Block = Block
   , chainwork         :: Text
   , nTx               :: Int
   , previousblockhash :: BlockHash
-  , nextblockhash     :: BlockHash
+  , nextblockhash     :: Maybe BlockHash
   } deriving (Eq, Show, Generic)
 
 instance FromJSON Block
