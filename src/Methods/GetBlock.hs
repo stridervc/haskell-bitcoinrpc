@@ -29,7 +29,7 @@ data Block = Block
   , weight            :: Int
   , height            :: Integer
   , version           :: Int
-  , versionhex        :: Text
+  , versionHex        :: Text
   , merkleroot        :: Text
   , tx                :: [TxID]
   , time              :: Int
