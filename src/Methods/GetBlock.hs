@@ -45,4 +45,4 @@ instance FromJSON Block
 
 -- | Get block info
 getBlock :: MonadIO m => BitcoinRPCClient -> BlockHash -> m (Either Text Block)
-getBlock client bhash = callBitcoinRPC client "getblock" [bhash]
+getBlock client bhash = callBitcoinRPC client "getblock" [String bhash]

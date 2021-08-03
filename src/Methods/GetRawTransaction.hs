@@ -5,6 +5,10 @@
 module Methods.GetRawTransaction
   ( getRawTransaction
   , Transaction (..)
+  , VIn (..)
+  , VOut (..)
+  , ScriptSig (..)
+  , ScriptPubKey (..)
   ) where
 
 import RPC
@@ -17,9 +21,50 @@ import Data.Text (Text)
 import Control.Monad.IO.Class (MonadIO)
 import Network.HTTP.Simple (getResponseBody)
 
+data ScriptSig = ScriptSig
+  { asm   :: Text
+  , hex   :: Text
+  } deriving (Eq, Show, Generic)
+
+instance FromJSON ScriptSig
+
+data VIn = VIn
+  { txid          :: Text
+  , vout          :: Int
+  , scriptSig     :: ScriptSig
+  , sequence      :: Int
+  , txinwitness   :: [Text]
+  } deriving (Eq, Show, Generic)
+
+instance FromJSON VIn
+
+data ScriptPubKey = ScriptPubKey
+  { asm         :: Text
+  , hex         :: Text
+  , reqSigs     :: Int
+  , scripttype  :: Text
+  , addresses   :: [Text]
+  } deriving (Eq, Show, Generic)
+
+instance FromJSON ScriptPubKey where
+  parseJSON (Object o) = ScriptPubKey
+    <$> o .: "asm"
+    <*> o .: "hex"
+    <*> o .: "reqSigs"
+    <*> o .: "type"
+    <*> o .: "addresses"
+  parseJSON invalid = undefined
+
+data VOut = VOut
+  { value         :: Float
+  -- , n             :: Int
+  , scriptPubKey  :: ScriptPubKey
+  } deriving (Eq, Show, Generic)
+
+instance FromJSON VOut
+
 data Transaction = Transaction
-  { in_active_chain   :: Bool
-  , hex               :: Text
+  { hex               :: Text
   , txid              :: TxID
   , hash              :: Text
   , size              :: Int
@@ -31,10 +76,12 @@ data Transaction = Transaction
   , confirmations     :: Int
   , blocktime         :: Int
   , time              :: Int
+  , vin               :: [VIn]
+  , vout              :: [VOut]
   } deriving (Eq, Show, Generic)
 
 instance FromJSON Transaction
 
 getRawTransaction :: MonadIO m => BitcoinRPCClient -> TxID -> m (Either Text Transaction)
-getRawTransaction client txid = callBitcoinRPC client "getrawtransaction" [txid, "true"]
+getRawTransaction client txid = callBitcoinRPC client "getrawtransaction" [String txid, Bool True]
 

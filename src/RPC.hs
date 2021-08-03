@@ -21,7 +21,7 @@ import GHC.Generics
 import Data.Aeson
 
 type RPCMethod  = Text
-type RPCParam   = Text
+type RPCParam   = Value
 
 data RPCRequestBody = RPCRequestBody
   { jsonrpc :: Text
