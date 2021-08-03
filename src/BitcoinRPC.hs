@@ -23,6 +23,8 @@ module BitcoinRPC
   , Block (..)
   , BlockHash
   , TxID
+  , getRawTransaction
+  , Transaction (..)
   ) where
 
 import BitcoinRPCClient
@@ -30,3 +32,4 @@ import BitcoinRPCClient
 import Methods.GetBlock
 import Methods.GetBlockCount
 import Methods.GetBlockchainInfo
+import Methods.GetRawTransaction
