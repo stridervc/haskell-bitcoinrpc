@@ -41,7 +41,7 @@ instance FromJSON VIn
 data ScriptPubKey = ScriptPubKey
   { asm         :: Text
   , hex         :: Text
-  , reqSigs     :: Int
+  , reqSigs     :: Maybe Int
   , scripttype  :: Text
   , addresses   :: [Text]
   } deriving (Eq, Show, Generic)
