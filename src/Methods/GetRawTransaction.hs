@@ -52,7 +52,7 @@ instance FromJSON ScriptPubKey where
     <*> o .:  "hex"
     <*> o .:? "reqSigs"
     <*> o .:  "type"
-    <*> o .:  "addresses"
+    <*> o .:? "addresses" .!= []
   parseJSON invalid = undefined
 
 data VOut = VOut
