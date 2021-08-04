@@ -25,6 +25,10 @@ module BitcoinRPC
   , TxID
   , getRawTransaction
   , Transaction (..)
+  , VIn (..)
+  , VOut (..)
+  , ScriptSig (..)
+  , ScriptPubKey (..)
   ) where
 
 import BitcoinRPCClient
