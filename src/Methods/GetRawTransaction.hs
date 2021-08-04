@@ -33,7 +33,7 @@ data VIn = VIn
   , vout          :: Maybe Int
   , scriptSig     :: Maybe ScriptSig
   , sequence      :: Maybe Int
-  , txinwitness   :: [Text]
+  , txinwitness   :: Maybe [Text]
   } deriving (Eq, Show, Generic)
 
 instance FromJSON VIn
@@ -43,7 +43,7 @@ data ScriptPubKey = ScriptPubKey
   , hex         :: Text
   , reqSigs     :: Maybe Int
   , scripttype  :: Text
-  , addresses   :: [Text]
+  , addresses   :: Maybe [Text]
   } deriving (Eq, Show, Generic)
 
 instance FromJSON ScriptPubKey where
@@ -52,7 +52,7 @@ instance FromJSON ScriptPubKey where
     <*> o .:  "hex"
     <*> o .:? "reqSigs"
     <*> o .:  "type"
-    <*> o .:? "addresses" .!= []
+    <*> o .:? "addresses"
   parseJSON invalid = undefined
 
 data VOut = VOut
