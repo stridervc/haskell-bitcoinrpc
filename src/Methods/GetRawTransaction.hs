@@ -31,8 +31,8 @@ instance FromJSON ScriptSig
 data VIn = VIn
   { txid          :: Maybe Text
   , vout          :: Maybe Int
-  , scriptSig     :: ScriptSig
-  , sequence      :: Int
+  , scriptSig     :: Maybe ScriptSig
+  , sequence      :: Maybe Int
   , txinwitness   :: [Text]
   } deriving (Eq, Show, Generic)
 
