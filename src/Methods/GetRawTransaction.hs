@@ -48,11 +48,11 @@ data ScriptPubKey = ScriptPubKey
 
 instance FromJSON ScriptPubKey where
   parseJSON (Object o) = ScriptPubKey
-    <$> o .: "asm"
-    <*> o .: "hex"
-    <*> o .: "reqSigs"
-    <*> o .: "type"
-    <*> o .: "addresses"
+    <$> o .:  "asm"
+    <*> o .:  "hex"
+    <*> o .:? "reqSigs"
+    <*> o .:  "type"
+    <*> o .:  "addresses"
   parseJSON invalid = undefined
 
 data VOut = VOut
