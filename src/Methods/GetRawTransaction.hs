@@ -30,7 +30,7 @@ instance FromJSON ScriptSig
 
 data VIn = VIn
   { txid          :: Maybe Text
-  , vout          :: Int
+  , vout          :: Maybe Int
   , scriptSig     :: ScriptSig
   , sequence      :: Int
   , txinwitness   :: [Text]
