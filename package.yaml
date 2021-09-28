@@ -31,7 +31,6 @@ library:
   - bytestring
   - scientific
   - containers
-  - safe-exceptions
 
 tests:
   haskell-bitcoinrpc-test:

@@ -9,7 +9,7 @@ module BitcoinRPCClient
 import RPC
 
 import Control.Monad.IO.Class (MonadIO, liftIO)
-import Control.Exception.Safe (tryIO)
+import Control.Exception (try)
 import Data.ByteString (ByteString)
 import Data.Text (Text, pack)
 import Network.HTTP.Simple
@@ -34,9 +34,9 @@ newBitcoinRPCClient host port username password
 -- | Perform an RPC with given method name and parameters
 callBitcoinRPC :: (MonadIO m, FromJSON a) => BitcoinRPCClient -> RPCMethod -> [RPCParam] -> m (Either Text a)
 callBitcoinRPC client method params = do
-  tryresponse <- liftIO $ tryIO $ httpRPC $ setRequestRPCMethod method params $ request client
+  tryresponse <- liftIO $ try $ httpRPC $ setRequestRPCMethod method params $ request client
   case tryresponse of
-    Left e          -> return $ Left $ pack $ show e
+    Left e          -> return $ Left $ pack $ show (e :: HttpException)
     Right response  -> case getResponseBody response of
                         Left e      -> return $ Left $ pack $ show e
                         Right body  -> case fromJSON $ result body of
