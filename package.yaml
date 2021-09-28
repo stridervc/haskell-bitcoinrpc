@@ -31,8 +31,6 @@ library:
   - bytestring
   - scientific
   - containers
-  - unliftio
-  - unliftio-core
 
 tests:
   haskell-bitcoinrpc-test:

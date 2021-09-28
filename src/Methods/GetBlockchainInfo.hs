@@ -12,7 +12,7 @@ module Methods.GetBlockchainInfo
 import RPC
 import BitcoinRPCClient
 
-import Control.Monad.IO.Unlift (MonadUnliftIO)
+import Control.Monad.IO.Class (MonadIO)
 import Data.Text (Text, pack)
 import Data.Map (Map)
 import Network.HTTP.Simple
@@ -77,5 +77,5 @@ data BlockchainInfo = BlockchainInfo
 instance FromJSON BlockchainInfo
 
 -- | Get blockchain info
-getBlockchainInfo :: MonadUnliftIO m => BitcoinRPCClient -> m (Either Text BlockchainInfo)
+getBlockchainInfo :: MonadIO m => BitcoinRPCClient -> m (Either Text BlockchainInfo)
 getBlockchainInfo client = callBitcoinRPC client "getblockchaininfo" []

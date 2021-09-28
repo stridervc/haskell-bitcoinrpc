@@ -16,7 +16,7 @@ import BitcoinRPCClient
 import Data.Aeson
 import GHC.Generics
 import Data.Text (Text, pack)
-import Control.Monad.IO.Unlift (MonadUnliftIO)
+import Control.Monad.IO.Class (MonadIO)
 import Network.HTTP.Simple (getResponseBody)
 
 data Block = Block
@@ -44,5 +44,5 @@ data Block = Block
 instance FromJSON Block
 
 -- | Get block info
-getBlock :: MonadUnliftIO m => BitcoinRPCClient -> BlockHash -> m (Either Text Block)
+getBlock :: MonadIO m => BitcoinRPCClient -> BlockHash -> m (Either Text Block)
 getBlock client bhash = callBitcoinRPC client "getblock" [String bhash]
