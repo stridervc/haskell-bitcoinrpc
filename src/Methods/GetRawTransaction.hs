@@ -29,8 +29,8 @@ data ScriptSig = ScriptSig
 instance FromJSON ScriptSig
 
 data VIn = VIn
-  { txid          :: Maybe TxID
-  , vout          :: Maybe Int
+  { txid          :: TxID
+  , vout          :: Int
   , scriptSig     :: Maybe ScriptSig
   , sequence      :: Maybe Int
   , txinwitness   :: [Text]
@@ -38,8 +38,8 @@ data VIn = VIn
 
 instance FromJSON VIn where
   parseJSON (Object o) = VIn
-    <$> o .:? "txid"
-    <*> o .:? "vout"
+    <$> o .:  "txid"
+    <*> o .:  "vout"
     <*> o .:? "scriptSig"
     <*> o .:? "sequence"
     <*> o .:? "txinwitness" .!= []
