@@ -45,6 +45,8 @@ library
     , http-conduit
     , scientific
     , text
+    , unliftio
+    , unliftio-core
   default-language: Haskell2010
 
 test-suite haskell-bitcoinrpc-test

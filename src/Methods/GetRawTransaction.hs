@@ -18,7 +18,7 @@ import BitcoinRPCClient
 import Data.Aeson
 import GHC.Generics
 import Data.Text (Text)
-import Control.Monad.IO.Class (MonadIO)
+import Control.Monad.IO.Unlift (MonadUnliftIO)
 import Network.HTTP.Simple (getResponseBody)
 
 data ScriptSig = ScriptSig
@@ -28,9 +28,10 @@ data ScriptSig = ScriptSig
 
 instance FromJSON ScriptSig
 
+-- Do these fields really need to be Maybes?
 data VIn = VIn
-  { txid          :: Maybe TxID
-  , vout          :: Maybe Int
+  { txid          :: TxID
+  , vout          :: Int
   , scriptSig     :: Maybe ScriptSig
   , sequence      :: Maybe Int
   , txinwitness   :: [Text]
@@ -38,8 +39,8 @@ data VIn = VIn
 
 instance FromJSON VIn where
   parseJSON (Object o) = VIn
-    <$> o .:? "txid"
-    <*> o .:? "vout"
+    <$> o .:  "txid"
+    <*> o .:  "vout"
     <*> o .:? "scriptSig"
     <*> o .:? "sequence"
     <*> o .:? "txinwitness" .!= []
@@ -89,6 +90,6 @@ data Transaction = Transaction
 
 instance FromJSON Transaction
 
-getRawTransaction :: MonadIO m => BitcoinRPCClient -> TxID -> m (Either Text Transaction)
+getRawTransaction :: MonadUnliftIO m => BitcoinRPCClient -> TxID -> m (Either Text Transaction)
 getRawTransaction client txid = callBitcoinRPC client "getrawtransaction" [String txid, Bool True]
 
