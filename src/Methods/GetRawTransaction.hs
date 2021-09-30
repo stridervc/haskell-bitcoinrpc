@@ -38,7 +38,7 @@ data VIn = VIn
 
 instance FromJSON VIn where
   parseJSON (Object o) = VIn
-    <$> o .:  "txid"
+    <$> o .:? "txid" .!= "coinbase"
     <*> o .:  "vout"
     <*> o .:? "scriptSig"
     <*> o .:? "sequence"
