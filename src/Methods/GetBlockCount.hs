@@ -7,12 +7,8 @@ module Methods.GetBlockCount
 import RPC
 import BitcoinRPCClient
 
-import Data.Text (Text, pack)
+import Data.Text (Text)
 import Control.Monad.IO.Class (MonadIO)
-import Data.Scientific (toRealFloat)
-import GHC.Float (float2Int)
-import Network.HTTP.Simple
-import Data.Aeson
 
 -- | Returns the height of the most-work fully-validated chain
 getBlockCount :: MonadIO m => BitcoinRPCClient -> m (Either Text Int)
