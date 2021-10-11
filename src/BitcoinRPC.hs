@@ -29,6 +29,7 @@ module BitcoinRPC
   , VOut (..)
   , ScriptSig (..)
   , ScriptPubKey (..)
+  , getUptime
   ) where
 
 import BitcoinRPCClient
@@ -37,3 +38,4 @@ import Methods.GetBlock
 import Methods.GetBlockCount
 import Methods.GetBlockchainInfo
 import Methods.GetRawTransaction
+import Methods.GetUptime

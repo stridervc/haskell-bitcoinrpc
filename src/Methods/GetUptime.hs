@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Methods.Uptime
+module Methods.GetUptime
   ( getUptime
   ) where
 

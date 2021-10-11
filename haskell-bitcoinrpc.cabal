@@ -31,7 +31,7 @@ library
       Methods.GetBlockchainInfo
       Methods.GetBlockCount
       Methods.GetRawTransaction
-      Methods.Uptime
+      Methods.GetUptime
       RPC
       Types
   other-modules:
