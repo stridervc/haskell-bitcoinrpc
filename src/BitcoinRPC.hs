@@ -30,6 +30,10 @@ module BitcoinRPC
   , ScriptSig (..)
   , ScriptPubKey (..)
   , getUptime
+  , getNetworkInfo
+  , NetworkInfo (..)
+  , LocalAddress (..)
+  , Network (..)
   ) where
 
 import BitcoinRPCClient
@@ -39,3 +43,4 @@ import Methods.GetBlockCount
 import Methods.GetBlockchainInfo
 import Methods.GetRawTransaction
 import Methods.GetUptime
+import Methods.GetNetworkInfo

@@ -30,6 +30,7 @@ library
       Methods.GetBlock
       Methods.GetBlockchainInfo
       Methods.GetBlockCount
+      Methods.GetNetworkInfo
       Methods.GetRawTransaction
       Methods.GetUptime
       RPC
