@@ -59,7 +59,10 @@ instance FromJSON ScriptPubKey where
     <*> o .:  "hex"
     <*> o .:? "reqSigs"
     <*> o .:  "type"
-    <*> o .:? "addresses" .!= []
+    <*> (o .:? "addresses" .!= [] >>= \addrs ->
+          if null addrs
+            then maybe [] (:[]) <$> o .:? "address"
+            else pure addrs)
   parseJSON invalid = undefined
 
 data VOut = VOut
