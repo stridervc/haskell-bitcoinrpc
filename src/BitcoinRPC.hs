@@ -37,6 +37,7 @@ module BitcoinRPC
   , getMempoolInfo
   , MempoolInfo (..)
   , getRawMempool
+  , getBlockHash
   ) where
 
 import BitcoinRPCClient
@@ -49,3 +50,4 @@ import Methods.GetUptime
 import Methods.GetNetworkInfo
 import Methods.GetMempoolInfo
 import Methods.GetRawMempool
+import Methods.GetBlockHash
