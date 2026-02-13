@@ -37,7 +37,7 @@ data Block = Block
   , difficulty        :: Float
   , chainwork         :: Text
   , nTx               :: Int
-  , previousblockhash :: BlockHash
+  , previousblockhash :: Maybe BlockHash
   , nextblockhash     :: Maybe BlockHash
   } deriving (Eq, Show, Generic)
 
