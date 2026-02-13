@@ -23,7 +23,9 @@ library
       Methods.GetBlock
       Methods.GetBlockchainInfo
       Methods.GetBlockCount
+      Methods.GetMempoolInfo
       Methods.GetNetworkInfo
+      Methods.GetRawMempool
       Methods.GetRawTransaction
       Methods.GetUptime
       RPC

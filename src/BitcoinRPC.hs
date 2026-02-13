@@ -34,6 +34,9 @@ module BitcoinRPC
   , NetworkInfo (..)
   , LocalAddress (..)
   , Network (..)
+  , getMempoolInfo
+  , MempoolInfo (..)
+  , getRawMempool
   ) where
 
 import BitcoinRPCClient
@@ -44,3 +47,5 @@ import Methods.GetBlockchainInfo
 import Methods.GetRawTransaction
 import Methods.GetUptime
 import Methods.GetNetworkInfo
+import Methods.GetMempoolInfo
+import Methods.GetRawMempool
