@@ -24,6 +24,7 @@ library
       Methods.GetBlockchainInfo
       Methods.GetBlockCount
       Methods.GetBlockHash
+      Methods.GetBlockVerbose
       Methods.GetMempoolInfo
       Methods.GetNetworkInfo
       Methods.GetRawMempool

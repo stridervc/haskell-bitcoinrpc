@@ -38,6 +38,9 @@ module BitcoinRPC
   , MempoolInfo (..)
   , getRawMempool
   , getBlockHash
+  , getBlockVerbose
+  , VerboseBlock (..)
+  , BlockTransaction (..)
   ) where
 
 import BitcoinRPCClient
@@ -51,3 +54,4 @@ import Methods.GetNetworkInfo
 import Methods.GetMempoolInfo
 import Methods.GetRawMempool
 import Methods.GetBlockHash
+import Methods.GetBlockVerbose
